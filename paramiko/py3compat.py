@@ -142,14 +142,17 @@ else:
         else:
             raise TypeError("Expected unicode or bytes, got {!r}".format(s))
 
-    def u(s, encoding="utf8"):
+    def u(s, encoding='utf8'):
         """cast bytes or unicode to unicode"""
         if isinstance(s, bytes):
-            return s.decode(encoding)
+            try:
+                return s.decode(encoding)
+            except UnicodeDecodeError:
+                return s.decode('ISO-8859-1')
         elif isinstance(s, str):
             return s
         else:
-            raise TypeError("Expected unicode or bytes, got {!r}".format(s))
+            raise TypeError("Expected unicode or bytes, got %r" % s)
 
     def b2s(s):
         return s.decode() if isinstance(s, bytes) else s
